@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>640</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/images/main16.png</normaloff>:/images/main16.png</iconset>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="foregroundBrush">
+       <brush brushstyle="NoBrush">
+        <color alpha="255">
+         <red>0</red>
+         <green>0</green>
+         <blue>0</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Open"/>
+    <addaction name="action_Close"/>
+    <addaction name="separator"/>
+    <addaction name="action_Exit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_About"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>Show Toolbar</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomToolBarArea|Qt::TopToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="action_Open">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/folder.png</normaloff>:/images/icons/folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open Map...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Save_ROM">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/disk.png</normaloff>:/images/icons/disk.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save ROM</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_Save_ROM_As">
+   <property name="text">
+    <string>Save ROM As...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="action_Close">
+   <property name="text">
+    <string>Close Map</string>
+   </property>
+  </action>
+  <action name="action_Load_Course_from_File">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Load Course from &amp;File...</string>
+   </property>
+  </action>
+  <action name="action_Save_Level">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Save Room</string>
+   </property>
+  </action>
+  <action name="action_Save_Course_to_File">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Save Course to File...</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="action_Cut">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/cut.png</normaloff>:/images/icons/cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cu&amp;t</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/page_copy.png</normaloff>:/images/icons/page_copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="action_Paste">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/paste_plain.png</normaloff>:/images/icons/paste_plain.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="action_Delete">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/delete.png</normaloff>:/images/icons/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="action_Contents">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/help.png</normaloff>:/images/icons/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Contents...</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About...</string>
+   </property>
+  </action>
+  <action name="action_Edit_Tiles">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-tilepicker.png</normaloff>:/images/icons/kale-tilepicker.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Edit Tiles...</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
+   </property>
+  </action>
+  <action name="action_Previous_Level">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/resultset_previous.png</normaloff>:/images/icons/resultset_previous.png</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Level</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="action_Next_Level">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/resultset_next.png</normaloff>:/images/icons/resultset_next.png</iconset>
+   </property>
+   <property name="text">
+    <string>Next Level</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="action_Level_Properties">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-roomheader.png</normaloff>:/images/icons/kale-roomheader.png</iconset>
+   </property>
+   <property name="text">
+    <string>Room Properties...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="action_Dump_Header">
+   <property name="text">
+    <string>Dump level header to stdout</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="action_Dump_Level">
+   <property name="text">
+    <string>Dump level chunks to text file</string>
+   </property>
+  </action>
+  <action name="action_Save_Level_to_Image">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/image.png</normaloff>:/images/icons/image.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Level to Image...</string>
+   </property>
+  </action>
+  <action name="action_Select_Level">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-roomwarp.png</normaloff>:/images/icons/kale-roomwarp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Room...</string>
+   </property>
+  </action>
+  <action name="action_Undo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/arrow_undo.png</normaloff>:/images/icons/arrow_undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="action_Redo">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/arrow_redo.png</normaloff>:/images/icons/arrow_redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="action_Select_Tiles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-tiles.png</normaloff>:/images/icons/kale-tiles.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Tiles</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
+  </action>
+  <action name="action_Select_Sprites">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-enemies.png</normaloff>:/images/icons/kale-enemies.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Sprites</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
+  </action>
+  <action name="action_Select_Exits">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-doors-new.png</normaloff>:/images/icons/kale-doors-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select Exits</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
+   </property>
+  </action>
+  <action name="action_Show_Screen_Boundaries">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-screens.png</normaloff>:/images/icons/kale-screens.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Screen Boundaries</string>
+   </property>
+  </action>
+  <action name="action_See_Through_Breakable_Tiles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-tileblend-new.png</normaloff>:/images/icons/kale-tileblend-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>See Through Breakable Tiles</string>
+   </property>
+  </action>
+  <action name="action_Show_Sprites">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Sprites</string>
+   </property>
+  </action>
+  <action name="action_Show_Exits">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Exits</string>
+   </property>
+  </action>
+  <action name="action_Double_Size">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-2xmagnification.png</normaloff>:/images/icons/kale-2xmagnification.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double Size</string>
+   </property>
+  </action>
+  <action name="action_Edit_Map_Clear_Data">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/kale-mapclear.png</normaloff>:/images/icons/kale-mapclear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Map Clear Data...</string>
+   </property>
+  </action>
+  <action name="action_Edit_Tilesets">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/bricks.png</normaloff>:/images/icons/bricks.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Tilesets...</string>
+   </property>
+  </action>
+  <action name="action_Edit_Palettes">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/images/icons/color_swatch.png</normaloff>:/images/icons/color_swatch.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Palettes...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>
