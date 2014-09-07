@@ -44,7 +44,10 @@ MapScene::MapScene(QObject *parent, LevelData *currentLevel)
       stack(this),
       level(currentLevel),
       tilesetPixmap(256*TILE_SIZE, TILE_SIZE),
-      animFrame(0), animTimer(this)
+      animFrame(0), animTimer(this),
+      showCollision(true),
+      showStuff({true, true, true}),
+      showOther(true)
 {
     QObject::connect(this, SIGNAL(edited()),
                      this, SLOT(update()));
@@ -394,6 +397,31 @@ void MapScene::cancelSelection() {
     selY = 0;
 }
 
+void MapScene::setShowCollision(bool on) {
+    showCollision = on;
+    update();
+}
+
+void MapScene::setShowFGDecor(bool on) {
+    showStuff[0] = on;
+    update();
+}
+
+void MapScene::setShowTerrain(bool on) {
+    showStuff[1] = on;
+    update();
+}
+
+void MapScene::setShowBGDecor(bool on) {
+    showStuff[2] = on;
+    update();
+}
+
+void MapScene::setShowOther(bool on) {
+    showOther = on;
+    update();
+}
+
 void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
     QRectF rec = sceneRect() & rect;
 
@@ -406,24 +434,35 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
 
             // draw data4 parts 1-3 here (decorations)
             for (uint i = 0; i < 3; i++) {
-                if (level->blocks[y][x].data4[i].first >= 0) {
+                if (showStuff[i] && level->blocks[y][x].data4[i].first >= 0) {
                     // (TODO: colors / tile numbers)
                     QColor color;
                     color.setHsv(20 * (level->blocks[y][x].data4[i].first) & 0xFF,
                                  255,
                                  255,
-                                 64);
+                                 128);
                     painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
                                      color);
                 }
             }
 
             // draw data3 (collision)
-            if (level->blocks[y][x].data3 > 0) {
+            if (showCollision && level->blocks[y][x].data3 > 0) {
                 // (TODO: colors / tile numbers)
                 QColor color;
                 color.setHsv(20 * (level->blocks[y][x].data3 - 1) & 0xFF,
                              //20 * (level->blocks[y][x].data3 >> 8) & 0xFF,
+                             255,
+                             255);
+                painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                 color);
+            }
+
+            // draw data1 (??)
+            if (showOther && level->blocks[y][x].data1 > -1) {
+                // (TODO: colors / tile numbers)
+                QColor color;
+                color.setHsv(20 * (level->blocks[y][x].data1) & 0xFF,
                              255,
                              255);
                 painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,

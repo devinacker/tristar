@@ -55,27 +55,49 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupSignals() {
     // file menu
-    QObject::connect(ui->action_Open, SIGNAL(triggered()),
-                     this, SLOT(openFile()));
-    QObject::connect(ui->action_Close, SIGNAL(triggered()),
-                     this, SLOT(closeFile()));
+    connect(ui->action_Open, SIGNAL(triggered()),
+            this, SLOT(openFile()));
+    connect(ui->action_Close, SIGNAL(triggered()),
+            this, SLOT(closeFile()));
 
-    QObject::connect(ui->action_Exit, SIGNAL(triggered()),
-                     this, SLOT(close()));
+    connect(ui->action_Exit, SIGNAL(triggered()),
+            this, SLOT(close()));
+
+    // view menu
+    connect(ui->action_Collision, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowCollision(bool)));
+    connect(ui->action_FG_Decor, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowFGDecor(bool)));
+    connect(ui->action_Terrain, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowTerrain(bool)));
+    connect(ui->action_BG_Decor, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowBGDecor(bool)));
+    connect(ui->action_Other, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowOther(bool)));
 
     // help menu
-    QObject::connect(ui->action_About, SIGNAL(triggered()),
-                     this, SLOT(showAbout()));
+    connect(ui->action_About, SIGNAL(triggered()),
+            this, SLOT(showAbout()));
 
     // other window-related stuff
     // receive status bar messages from scene
-    QObject::connect(scene, SIGNAL(statusMessage(QString)),
-                     ui->statusBar, SLOT(showMessage(QString)));
+    connect(scene, SIGNAL(statusMessage(QString)),
+            ui->statusBar, SLOT(showMessage(QString)));
 }
 
 void MainWindow::setupActions() {
     // from file menu
     ui->toolBar->addAction(ui->action_Open);
+    ui->toolBar->addSeparator();
+
+    // from view menu
+    ui->toolBar->addAction(ui->action_Collision);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->action_FG_Decor);
+    ui->toolBar->addAction(ui->action_Terrain);
+    ui->toolBar->addAction(ui->action_BG_Decor);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->action_Other);
 }
 
 /*

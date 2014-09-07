@@ -17,7 +17,7 @@ ObjectWindow::ObjectWindow(QWidget *parent, const LevelData *level) :
     ui->setupUi(this);
 
     stateRoot.setText(0, "States");
-    enemyRoot.setText(0, "Enemies");
+    enemyRoot.setText(0, "Enemy Types");
     objectRoot.setText(0, "Objects");
     otherRoot.setText(0, "Unknown");
 
@@ -54,7 +54,7 @@ void ObjectWindow::update() {
     for (uint i = 0; i < children.size(); i++) {
         delete children[i];
     }
-    enemyRoot.setText(0, QString("Enemies (%1)").arg(level->enemies.size()));
+    enemyRoot.setText(0, QString("Enemy Types (%1)").arg(level->enemies.size()));
     for (uint i = 0; i < level->enemies.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&enemyRoot);
         const enemy_t &enemy = level->enemies[i];

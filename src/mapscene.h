@@ -41,6 +41,10 @@ private:
     uint animFrame;
     QTimer animTimer;
 
+    bool showCollision;
+    bool showStuff[3];
+    bool showOther;
+
     void copyTiles(bool cut);
     void deleteTiles();
     void deleteItems();
@@ -77,6 +81,12 @@ public slots:
     void refresh();
     void refreshPixmap();
     void animate();
+
+    void setShowCollision(bool);
+    void setShowFGDecor(bool);
+    void setShowTerrain(bool);
+    void setShowBGDecor(bool);
+    void setShowOther(bool);
 
 signals:
     void doubleClicked();
