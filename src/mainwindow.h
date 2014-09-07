@@ -13,6 +13,7 @@
 
 #include "level.h"
 #include "mapscene.h"
+#include "objectwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -54,6 +55,7 @@ private:
 
     // The level data
     LevelData level;
+    ObjectWindow objWin;
 
     // renderin stuff
     MapScene *scene;

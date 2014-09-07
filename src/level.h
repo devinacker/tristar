@@ -1,10 +1,12 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include <QList>
+#include <QVector>
 #include <QMap>
 #include <QString>
 #include <cstdint>
+
+class QFile;
 
 struct mapblock_t {
     int16_t  data1;
@@ -25,26 +27,34 @@ struct enemy_t {
 };
 
 struct object_t {
-    int32_t data[13];
+    uint32_t x, y, type;
+    int32_t data[10];
 };
 
 struct data5_t {
-    int32_t data[6];
+    int32_t data[3];
+    uint32_t x, y, type;
 };
 
 struct LevelData {
     uint width, height;
     QString musicName;
 
-    QList<QList<mapblock_t>> blocks;
+    QVector<QVector<mapblock_t>> blocks;
+
+    // from chunk 4
+    uint32_t unknown1, unknown2;
 
     QMap<QString, enemystate_t> states;
-    QList<enemy_t> enemies;
+    QVector<enemy_t> enemies;
 
-    QList<object_t> objects;
-    QList<QString> objectNames;
+    QVector<object_t> objects;
+    QVector<QString> objectNames;
 
-    QList<data5_t> data5;
+    QVector<data5_t> data5;
+
+    void open(QFile&);
+    void clear();
 };
 
 #endif // LEVEL_H

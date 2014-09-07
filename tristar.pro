@@ -19,15 +19,19 @@ SOURCES += \
     src/mapscene.cpp \
     src/mainwindow.cpp \
     src/main.cpp \
+    src/level.cpp \
+    src/objectwindow.cpp
     
 HEADERS  += \
     src/mapscene.h \
     src/mainwindow.h \
     src/version.h \
-    src/level.h
+    src/level.h \
+    src/objectwindow.h
     
 FORMS += \
-    src/mainwindow.ui
+    src/mainwindow.ui \
+    src/objectwindow.ui
 
 RESOURCES += \
     src/icons.qrc

@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QFile>
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -17,6 +18,9 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "level.h"
+#include "mapscene.h"
+#include "objectwindow.h"
 #include "version.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -34,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // remove margins around map view and other stuff
     this->centralWidget()->layout()->setContentsMargins(0,0,0,0);
+
+    objWin.setLevel(&level);
 
     setupSignals();
     setupActions();
@@ -141,7 +147,36 @@ void MainWindow::openFile() {
         status(tr("Opening file %1").arg(newFileName));
 
         // open file
-        // TODO: this
+        QFile file(newFileName);
+        if (file.open(QFile::ReadOnly)) {
+            // check magic
+            file.seek(0);
+            if (file.read(6) != "XBIN\x34\x12") {
+                QMessageBox::information(this,
+                                         "Open Map",
+                                         "File is not a valid map.",
+                                         QMessageBox::Ok);
+
+                file.close();
+                return;
+            }
+
+            fileName = newFileName;
+            fileOpen = true;
+            setOpenFileActions(true);
+
+            level.open(file);
+            objWin.update();
+            objWin.show();
+
+            updateTitle();
+            file.close();
+        } else {
+            QMessageBox::information(this,
+                                     "Open Map",
+                                     "Unable to open file.",
+                                     QMessageBox::Ok);
+        }
     }
 }
 
@@ -163,6 +198,8 @@ int MainWindow::closeFile() {
     setOpenFileActions(false);
     fileOpen = false;
     updateTitle();
+
+    objWin.hide();
 
     return 0;
 }
