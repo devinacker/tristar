@@ -1,5 +1,6 @@
 debug/
 release/
+map/
 Makefile*
 ui_*.h
 *.pro.user

@@ -166,6 +166,7 @@ void MainWindow::openFile() {
             setOpenFileActions(true);
 
             level.open(file);
+            scene->refresh();
             objWin.update();
             objWin.show();
 

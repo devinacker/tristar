@@ -22,12 +22,13 @@ void LevelData::open(QFile& file) {
     // read width/height
     file.read((char*)&width, 4);
     file.read((char*)&height, 4);
+
     this->width = width;
     this->height = height;
 
     this->blocks.resize(height);
     // read info
-    for (uint y = 0; y < height; y++) {
+    for (int y = height - 1; y >= 0; y--) {
         this->blocks[y].resize(width);
         for (uint x = 0; x < width; x++) {
             file.read((char*)&this->blocks[y][x].data1, 2);
@@ -42,9 +43,17 @@ void LevelData::open(QFile& file) {
     file.read((char*)&ptr, 4);
     file.seek(ptr);
     // read info
-    for (uint y = 0; y < height; y++) {
+    file.read((char*)&width, 4);
+    file.read((char*)&height, 4);
+
+    // is there a mismatch between the width/height given here and elsewhere?
+    if (width != this->width || height != this->height)
+        printf("data3 size mismatch: (%u, %u) != (%u, %u)\n",
+               this->width, this->height, width, height);
+
+    for (int y = height - 1; y >= 0; y--) {
          for (uint x = 0; x < width; x++) {
-             file.read((char*)&this->blocks[y][x].data3, 2);
+             file.read((char*)&this->blocks[y][x].data3, 4);
          }
     }
 
@@ -63,13 +72,14 @@ void LevelData::open(QFile& file) {
         file.seek(ptrs[i]);
         file.read((char*)&width, 4);
         file.read((char*)&height, 4);
+
         // is there a mismatch between the width/height given here and elsewhere?
         if (width != this->width || height != this->height)
-            printf("size mismatch (body %u): (%u, %u) != (%u, %u)\n",
+            printf("data4 size mismatch (body %u): (%u, %u) != (%u, %u)\n",
                    i, this->width, this->height, width, height);
 
         this->blocks.resize(height);
-        for (uint y = 0; y < height && y < this->height; y++) {
+        for (int y = height - 1; y >= 0; y--) {
              for (uint x = 0; x < width && this->width; x++) {
                  this->blocks[y].resize(width);
                  file.read((char*)&this->blocks[y][x].data4[i].first, 2);

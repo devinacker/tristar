@@ -20,7 +20,7 @@
 #define MAP_TEXT_PAD_V 0
 
 // move to a graphics-related source file eventually idk
-#define TILE_SIZE 32
+#define TILE_SIZE 12
 
 const QFont MapScene::infoFont("Segoe UI", 10, QFont::Bold);
 const QFontMetrics MapScene::infoFontMetrics(MapScene::infoFont);
@@ -70,8 +70,8 @@ void MapScene::refresh() {
     }
 
     // TODO: set dimensions
-    uint width = 0; // level->header.screensH * SCREEN_WIDTH;
-    uint height = 0; // level->header.screensV * SCREEN_HEIGHT;
+    uint width = level->width;
+    uint height = level->height;
     setSceneRect(0, 0, width * TILE_SIZE, height * TILE_SIZE);
 
     //setAnimSpeed(level->header.animSpeed);
@@ -404,6 +404,31 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
         for (uint x = rec.left() / TILE_SIZE; x < rec.right() / TILE_SIZE; x++) {
             // TODO: draw anything (depending on which data section is selected)
 
+            // draw data4 parts 1-3 here (decorations)
+            for (uint i = 0; i < 3; i++) {
+                if (level->blocks[y][x].data4[i].first >= 0) {
+                    // (TODO: colors / tile numbers)
+                    QColor color;
+                    color.setHsv(20 * (level->blocks[y][x].data4[i].first) & 0xFF,
+                                 255,
+                                 255,
+                                 64);
+                    painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                     color);
+                }
+            }
+
+            // draw data3 (collision)
+            if (level->blocks[y][x].data3 > 0) {
+                // (TODO: colors / tile numbers)
+                QColor color;
+                color.setHsv(20 * (level->blocks[y][x].data3 - 1) & 0xFF,
+                             //20 * (level->blocks[y][x].data3 >> 8) & 0xFF,
+                             255,
+                             255);
+                painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                                 color);
+            }
         }
     }
 
