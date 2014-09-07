@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QMAKE_CFLAGS += -std=c99
 QMAKE_CXXFLAGS += -std=c++11
 
-TARGET = kale
+TARGET = tristar
 TEMPLATE = app
 CONFIG += c++11
 

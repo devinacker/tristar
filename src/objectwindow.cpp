@@ -38,12 +38,12 @@ void ObjectWindow::update() {
 
     // update enemy states
     children = stateRoot.takeChildren();
-    for (uint i = 0; i < children.size(); i++) {
+    for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
     QList<QString> states = level->states.keys();
     stateRoot.setText(0, QString("States (%1)").arg(states.size()));
-    for (uint i = 0; i < states.size(); i++) {
+    for (int i = 0; i < states.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&stateRoot);
         item->setText(0, states[i]);
         item->setData(1, 0, i);
@@ -51,11 +51,11 @@ void ObjectWindow::update() {
 
     // update enemies
     children = enemyRoot.takeChildren();
-    for (uint i = 0; i < children.size(); i++) {
+    for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
     enemyRoot.setText(0, QString("Enemy Types (%1)").arg(level->enemies.size()));
-    for (uint i = 0; i < level->enemies.size(); i++) {
+    for (int i = 0; i < level->enemies.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&enemyRoot);
         const enemy_t &enemy = level->enemies[i];
         item->setText(0, QString("%1 (%2)")
@@ -65,11 +65,11 @@ void ObjectWindow::update() {
 
     // update objects
     children = objectRoot.takeChildren();
-    for (uint i = 0; i < children.size(); i++) {
+    for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
     objectRoot.setText(0, QString("Objects (%1)").arg(level->objects.size()));
-    for (uint i = 0; i < level->objects.size(); i++) {
+    for (int i = 0; i < level->objects.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&objectRoot);
         const object_t &object = level->objects[i];
         QString name = "invalid";
@@ -83,11 +83,11 @@ void ObjectWindow::update() {
 
     // update unknown thing
     children = otherRoot.takeChildren();
-    for (uint i = 0; i < children.size(); i++) {
+    for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
     otherRoot.setText(0, QString("Unknown (%1)").arg(level->data5.size()));
-    for (uint i = 0; i < level->data5.size(); i++) {
+    for (int i = 0; i < level->data5.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&otherRoot);
         const data5_t &other = level->data5[i];
         item->setText(0, QString("(%1, %2) Unknown %3")
