@@ -433,14 +433,14 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
             // TODO: draw anything (depending on which data section is selected)
 
             // draw data4 parts 1-3 here (decorations)
-            for (uint i = 0; i < 3; i++) {
+            for (int i = 2; i >= 0; i--) {
                 if (showStuff[i] && level->blocks[y][x].data4[i].first >= 0) {
                     // (TODO: colors / tile numbers)
                     QColor color;
                     color.setHsv(20 * (level->blocks[y][x].data4[i].first) & 0xFF,
                                  255,
                                  255,
-                                 128);
+                                 i == 1 ? 255 : 128);
                     painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
                                      color);
                 }
