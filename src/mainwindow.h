@@ -55,7 +55,7 @@ private:
 
     // The level data
     LevelData level;
-    ObjectWindow objWin;
+    ObjectWindow *objWin;
 
     // renderin stuff
     MapScene *scene;

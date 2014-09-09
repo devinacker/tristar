@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     fileOpen(false),
+    objWin(new ObjectWindow(this, &level)),
     scene(new MapScene(this, &level))
 {
     ui->setupUi(this);
@@ -39,8 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // remove margins around map view and other stuff
     this->centralWidget()->layout()->setContentsMargins(0,0,0,0);
 
-    objWin.setLevel(&level);
-
     setupSignals();
     setupActions();
     setOpenFileActions(false);
@@ -50,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete objWin;
     delete scene;
 }
 
@@ -74,6 +74,8 @@ void MainWindow::setupSignals() {
             scene, SLOT(setShowBGDecor(bool)));
     connect(ui->action_Breakable, SIGNAL(triggered(bool)),
             scene, SLOT(setShowBreakable(bool)));
+    connect(ui->action_Enemies, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowEnemies(bool)));
     connect(ui->action_Objects, SIGNAL(triggered(bool)),
             scene, SLOT(setShowObjects(bool)));
     connect(ui->action_Items, SIGNAL(triggered(bool)),
@@ -102,6 +104,7 @@ void MainWindow::setupActions() {
     ui->toolBar->addAction(ui->action_BG_Decor);
     ui->toolBar->addAction(ui->action_Breakable);
     ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->action_Enemies);
     ui->toolBar->addAction(ui->action_Objects);
     ui->toolBar->addAction(ui->action_Items);
 }
@@ -195,8 +198,8 @@ void MainWindow::openFile() {
 
             level.open(file);
             scene->refresh();
-            objWin.update();
-            objWin.show();
+            objWin->update();
+            objWin->show();
 
             updateTitle();
             file.close();
@@ -228,7 +231,7 @@ int MainWindow::closeFile() {
     fileOpen = false;
     updateTitle();
 
-    objWin.hide();
+    objWin->hide();
 
     return 0;
 }

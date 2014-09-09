@@ -20,11 +20,12 @@
 #define MAP_TEXT_PAD_V 0
 
 // move to a graphics-related source file eventually idk
-#define TILE_SIZE 12
+#define TILE_SIZE 16
 
 const QFont MapScene::infoFont("Segoe UI", 10, QFont::Bold);
 const QFontMetrics MapScene::infoFontMetrics(MapScene::infoFont);
 
+const QColor MapScene::enemyColor(255, 255, 255, 192);
 const QColor MapScene::objectColor(255, 192, 192, 192);
 const QColor MapScene::itemColor(0, 192, 224, 192);
 
@@ -49,7 +50,8 @@ MapScene::MapScene(QObject *parent, LevelData *currentLevel)
       showVisual({true, true, true}),
       showBreakable(true),
       showObjects(true),
-      showItems(true)
+      showItems(true),
+      showEnemies(true)
 {
     QObject::connect(this, SIGNAL(edited()),
                      this, SLOT(update()));
@@ -434,6 +436,11 @@ void MapScene::setShowItems(bool on) {
     update();
 }
 
+void MapScene::setShowEnemies(bool on) {
+    showEnemies = on;
+    update();
+}
+
 void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
     QRectF rec = sceneRect() & rect;
 
@@ -535,6 +542,26 @@ void MapScene::drawForeground(QPainter *painter, const QRectF& /* rect */) {
             painter->fillRect(objX, objY - infoRect.height() + MAP_TEXT_PAD_V,
                              infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + MAP_TEXT_PAD_V,
                              MapScene::itemColor);
+            painter->setFont(MapScene::infoFont);
+            painter->drawText(objX, objY - infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                              infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                              0, infoText);
+    }
+
+    // draw enemies
+    if (showEnemies) for (uint i = 0; i < level->enemies.size(); i++) {
+            const enemy_t &obj = level->enemies[i];
+            const enemytype_t &type = level->enemyTypes[obj.type];
+
+            QString infoText = type.name;
+            QRect infoRect = MapScene::infoFontMetrics.boundingRect(infoText);
+            double objX = (double)obj.x / 16 * TILE_SIZE;
+            // invert Y-axis
+            double objY = double(16 * level->height - obj.y) / 16 * TILE_SIZE;
+
+            painter->fillRect(objX, objY - infoRect.height() + MAP_TEXT_PAD_V,
+                             infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + MAP_TEXT_PAD_V,
+                             MapScene::enemyColor);
             painter->setFont(MapScene::infoFont);
             painter->drawText(objX, objY - infoRect.height() + 2 * MAP_TEXT_PAD_V,
                               infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + 2 * MAP_TEXT_PAD_V,

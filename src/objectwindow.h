@@ -28,7 +28,7 @@ private:
     Ui::ObjectWindow *ui;
     const LevelData *level;
 
-    QTreeWidgetItem stateRoot, enemyRoot, objectRoot, itemRoot;
+    QTreeWidgetItem enemyRoot, typeRoot, objectRoot, itemRoot;
 };
 
 #endif // OBJECTWINDOW_H

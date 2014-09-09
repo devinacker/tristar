@@ -17,12 +17,12 @@ ObjectWindow::ObjectWindow(QWidget *parent, const LevelData *level) :
 {
     ui->setupUi(this);
 
-    stateRoot.setText(0, "States");
-    enemyRoot.setText(0, "Enemy Types");
+    enemyRoot.setText(0, "Enemies");
+    typeRoot.setText(0, "Enemy Types");
     objectRoot.setText(0, "Objects");
     itemRoot.setText(0, "Items");
 
-    ui->tree->insertTopLevelItem(0, &stateRoot);
+    ui->tree->insertTopLevelItem(0, &typeRoot);
     ui->tree->insertTopLevelItem(1, &enemyRoot);
     ui->tree->insertTopLevelItem(2, &objectRoot);
     ui->tree->insertTopLevelItem(3, &itemRoot);
@@ -40,30 +40,33 @@ void ObjectWindow::update() {
 
     QList<QTreeWidgetItem*> children;
 
-    // update enemy states
-    children = stateRoot.takeChildren();
-    for (int i = 0; i < children.size(); i++) {
-        delete children[i];
-    }
-    QList<QString> states = level->states.keys();
-    stateRoot.setText(0, QString("States (%1)").arg(states.size()));
-    for (int i = 0; i < states.size(); i++) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(&stateRoot);
-        item->setText(0, states[i]);
-        item->setData(1, 0, i);
-    }
-
     // update enemies
     children = enemyRoot.takeChildren();
     for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
-    enemyRoot.setText(0, QString("Enemy Types (%1)").arg(level->enemies.size()));
+    enemyRoot.setText(0, QString("Enemies (%1)").arg(level->enemies.size()));
     for (int i = 0; i < level->enemies.size(); i++) {
         QTreeWidgetItem *item = new QTreeWidgetItem(&enemyRoot);
         const enemy_t &enemy = level->enemies[i];
+        const enemytype_t &type = level->enemyTypes[enemy.type];
+        item->setText(0, QString("(%1, %2) %3 (%4)")
+                      .arg(enemy.x).arg(enemy.y)
+                      .arg(type.name).arg(type.state));
+        item->setData(1, 0, i);
+    }
+
+    // update enemy types
+    children = typeRoot.takeChildren();
+    for (int i = 0; i < children.size(); i++) {
+        delete children[i];
+    }
+    typeRoot.setText(0, QString("Enemy Types (%1)").arg(level->enemyTypes.size()));
+    for (int i = 0; i < level->enemyTypes.size(); i++) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(&typeRoot);
+        const enemytype_t &type = level->enemyTypes[i];
         item->setText(0, QString("%1 (%2)")
-                       .arg(enemy.name).arg(enemy.state));
+                       .arg(type.name).arg(type.state));
         item->setData(1, 0, i);
     }
 
@@ -106,19 +109,22 @@ void ObjectWindow::showInfo(QTreeWidgetItem *item, int /* column */) {
 
     int num = item->data(1, 0).toInt();
 
-    // show enemy state info
-    if (parent == &stateRoot) {
-        QStringList states = level->states.keys();
-        const enemystate_t state = level->states[states[num]];
-        info = "%1, %2, %3, %4, %5, %6, %7, %8";
-        for (uint i = 0; i < 8; i++)
-            info = info.arg(state.data[i]);
+    // show enemy info
+    if (parent == &enemyRoot) {
+        const enemy_t enemy = level->enemies[num];
+        info = "%1, %2, %3\n%4, %5";
+        for (uint i = 0; i < 3; i++)
+            info = info.arg(enemy.data1[i]);
+        for (uint i = 0; i < 2; i++)
+            info = info.arg(enemy.data2[i]);
+
     } else if (parent == &objectRoot) {
         const object_t obj = level->objects[num];
         info = "Unknown: %1\nEnabled: %2\nParams: %3, %4, %5, %6, %7, %8, %9, %10";
         info = info.arg(obj.unknown).arg(obj.enabled ? "true" : "false");
         for (uint i = 0; i < 8; i++)
             info = info.arg(obj.params[i]);
+
     } else if (parent == &itemRoot) {
         const item_t itm = level->items[num];
         info = "%1, %2, %3, %4";

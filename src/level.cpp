@@ -88,34 +88,42 @@ void LevelData::open(QFile& file) {
         }
     }
 
-    // open enemy states (chunk 5)
+    // open enemies (chunk 5)
     seekChunk(file, 4);
     file.read((char*)&count, 4);
     for (uint i = 0; i < count; i++) {
-        enemystate_t state;
-        file.read((char*)&ptrs[0], 4);
-        // TODO: update with known fields
-        for (uint j = 0; j < 8; j++)
-            file.read((char*)&state.data[j], 4);
+        enemy_t enemy;
 
         // save position, read name
+        file.read((char*)&ptrs[0], 4);
         ptr = file.pos();
         file.seek(ptrs[0]);
         file.read((char*)&size, 4);
-        str = file.read(size);
-
-        // add to state map
-        this->states[str] = state;
+        enemy.name = file.read(size);
 
         // seek back
         file.seek(ptr);
+
+        // TODO: update with known fields
+        file.read((char*)&enemy.data1[0], 4);
+        file.read((char*)&enemy.data1[1], 4);
+        file.read((char*)&enemy.data1[2], 4);
+
+        file.read((char*)&enemy.type, 4);
+        file.read((char*)&enemy.x, 4);
+        file.read((char*)&enemy.y, 4);
+
+        file.read((char*)&enemy.data2[0], 4);
+        file.read((char*)&enemy.data2[1], 4);
+
+        this->enemies.push_back(enemy);
     }
 
-    // open enemies (chunk 6)
+    // open enemy types (chunk 6)
     seekChunk(file, 5);
     file.read((char*)&count, 4);
     for (uint i = 0; i < count; i++) {
-        enemy_t enemy;
+        enemytype_t type;
         // name pointer
         file.read((char*)&ptrs[0], 4);
         // state pointer
@@ -127,13 +135,13 @@ void LevelData::open(QFile& file) {
         // get name
         file.seek(ptrs[0]);
         file.read((char*)&size, 4);
-        enemy.name = file.read(size);
+        type.name = file.read(size);
         // get state
         file.seek(ptrs[1]);
         file.read((char*)&size, 4);
-        enemy.state = file.read(size);
+        type.state = file.read(size);
 
-        this->enemies.push_back(enemy);
+        this->enemyTypes.push_back(type);
 
         // seek back
         file.seek(ptr);
@@ -206,7 +214,7 @@ void LevelData::clear() {
     this->musicName = "";
 
     this->blocks.clear();
-    this->states.clear();
+    this->enemyTypes.clear();
     this->enemies.clear();
     this->objects.clear();
     this->objectNames.clear();

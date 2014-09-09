@@ -23,9 +23,8 @@ class MapScene : public QGraphicsScene {
     Q_OBJECT
 
 private:
-    static const QColor objectColor, infoBackColor;
+    static const QColor enemyColor, objectColor, itemColor, infoBackColor;
     static const QColor selectionColor, selectionBorder;
-    static const QColor itemColor;
     static const QFont infoFont;
     static const QFontMetrics infoFontMetrics;
 
@@ -44,6 +43,7 @@ private:
     bool showCollision;
     bool showVisual[3];
     bool showBreakable;
+    bool showEnemies;
     bool showObjects;
     bool showItems;
 
@@ -89,6 +89,7 @@ public slots:
     void setShowTerrain(bool);
     void setShowBGDecor(bool);
     void setShowBreakable(bool);
+    void setShowEnemies(bool);
     void setShowObjects(bool);
     void setShowItems(bool);
 

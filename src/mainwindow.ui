@@ -90,6 +90,7 @@
     <addaction name="action_BG_Decor"/>
     <addaction name="action_Breakable"/>
     <addaction name="separator"/>
+    <addaction name="action_Enemies"/>
     <addaction name="action_Objects"/>
     <addaction name="action_Items"/>
    </widget>
@@ -593,6 +594,17 @@
    </property>
    <property name="text">
     <string>Items</string>
+   </property>
+  </action>
+  <action name="action_Enemies">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enemies</string>
    </property>
   </action>
  </widget>

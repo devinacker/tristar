@@ -18,11 +18,14 @@ struct mapblock_t {
     } visual[3];
 };
 
-struct enemystate_t {
-    int32_t data[8];
+struct enemy_t {
+    QString name;
+    int32_t data1[3];
+    int32_t type, x, y;
+    int32_t data2[2];
 };
 
-struct enemy_t {
+struct enemytype_t {
     QString name, state;
 };
 
@@ -47,8 +50,8 @@ struct LevelData {
     // from chunk 4
     uint32_t unknown1, unknown2;
 
-    QMap<QString, enemystate_t> states;
     QVector<enemy_t> enemies;
+    QVector<enemytype_t> enemyTypes;
 
     QVector<object_t> objects;
     QVector<QString> objectNames;
