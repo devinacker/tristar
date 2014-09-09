@@ -161,8 +161,12 @@ void LevelData::open(QFile& file) {
         file.read((char*)&this->objects[i].x, 4);
         file.read((char*)&this->objects[i].y, 4);
         file.read((char*)&this->objects[i].type, 4);
-        for (uint j = 0; j < 10; j++) {
-            file.read((char*)&this->objects[i].data[j], 4);
+
+        file.read((char*)&this->objects[i].unknown, 4);
+        file.read((char*)&this->objects[i].enabled, 4);
+
+        for (uint j = 0; j < 8; j++) {
+            file.read((char*)&this->objects[i].params[j], 4);
         }
     }
     // object names

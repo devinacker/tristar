@@ -28,7 +28,9 @@ struct enemy_t {
 
 struct object_t {
     uint32_t x, y, type;
-    int32_t data[10];
+    int32_t unknown;
+    int32_t enabled;
+    int32_t params[8];
 };
 
 struct item_t {

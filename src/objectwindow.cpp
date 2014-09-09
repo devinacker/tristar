@@ -115,9 +115,10 @@ void ObjectWindow::showInfo(QTreeWidgetItem *item, int /* column */) {
             info = info.arg(state.data[i]);
     } else if (parent == &objectRoot) {
         const object_t obj = level->objects[num];
-        info = "%1, %2, %3, %4, %5, %6, %7, %8, %9, %10";
-        for (uint i = 0; i < 10; i++)
-            info = info.arg(obj.data[i]);
+        info = "Unknown: %1\nEnabled: %2\nParams: %3, %4, %5, %6, %7, %8, %9, %10";
+        info = info.arg(obj.unknown).arg(obj.enabled ? "true" : "false");
+        for (uint i = 0; i < 8; i++)
+            info = info.arg(obj.params[i]);
     } else if (parent == &itemRoot) {
         const item_t itm = level->items[num];
         info = "%1, %2, %3, %4";
