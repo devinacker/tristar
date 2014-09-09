@@ -25,13 +25,13 @@
 const QFont MapScene::infoFont("Segoe UI", 10, QFont::Bold);
 const QFontMetrics MapScene::infoFontMetrics(MapScene::infoFont);
 
-const QColor MapScene::infoColor(255, 192, 192, 192);
+const QColor MapScene::objectColor(255, 192, 192, 192);
+const QColor MapScene::itemColor(0, 192, 224, 192);
+
 const QColor MapScene::infoBackColor(255, 192, 192, 128);
 
 const QColor MapScene::selectionColor(255, 192, 192, 192);
 const QColor MapScene::selectionBorder(255, 192, 192, 255);
-
-const QColor MapScene::layerColor(0, 192, 224, 192);
 
 /*
   Overridden constructor which inits some scene info
@@ -46,8 +46,10 @@ MapScene::MapScene(QObject *parent, LevelData *currentLevel)
       tilesetPixmap(256*TILE_SIZE, TILE_SIZE),
       animFrame(0), animTimer(this),
       showCollision(true),
-      showStuff({true, true, true}),
-      showOther(true)
+      showVisual({true, true, true}),
+      showBreakable(true),
+      showObjects(true),
+      showItems(true)
 {
     QObject::connect(this, SIGNAL(edited()),
                      this, SLOT(update()));
@@ -403,22 +405,32 @@ void MapScene::setShowCollision(bool on) {
 }
 
 void MapScene::setShowFGDecor(bool on) {
-    showStuff[0] = on;
+    showVisual[0] = on;
     update();
 }
 
 void MapScene::setShowTerrain(bool on) {
-    showStuff[1] = on;
+    showVisual[1] = on;
     update();
 }
 
 void MapScene::setShowBGDecor(bool on) {
-    showStuff[2] = on;
+    showVisual[2] = on;
     update();
 }
 
-void MapScene::setShowOther(bool on) {
-    showOther = on;
+void MapScene::setShowBreakable(bool on) {
+    showBreakable = on;
+    update();
+}
+
+void MapScene::setShowObjects(bool on) {
+    showObjects = on;
+    update();
+}
+
+void MapScene::setShowItems(bool on) {
+    showItems = on;
     update();
 }
 
@@ -432,12 +444,12 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
         for (uint x = rec.left() / TILE_SIZE; x < rec.right() / TILE_SIZE; x++) {
             // TODO: draw anything (depending on which data section is selected)
 
-            // draw data4 parts 1-3 here (decorations)
+            // draw data4 parts 1-3 here (visual)
             for (int i = 2; i >= 0; i--) {
-                if (showStuff[i] && level->blocks[y][x].data4[i].first >= 0) {
+                if (showVisual[i] && level->blocks[y][x].visual[i].first >= 0) {
                     // (TODO: colors / tile numbers)
                     QColor color;
-                    color.setHsv(20 * (level->blocks[y][x].data4[i].first) & 0xFF,
+                    color.setHsv(20 * (level->blocks[y][x].visual[i].first) & 0xFF,
                                  255,
                                  255,
                                  i == 1 ? 255 : 128);
@@ -447,10 +459,10 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
             }
 
             // draw data3 (collision)
-            if (showCollision && level->blocks[y][x].data3 > 0) {
+            if (showCollision && level->blocks[y][x].collision > 0) {
                 // (TODO: colors / tile numbers)
                 QColor color;
-                color.setHsv(20 * (level->blocks[y][x].data3 - 1) & 0xFF,
+                color.setHsv(20 * (level->blocks[y][x].collision - 1) & 0xFF,
                              //20 * (level->blocks[y][x].data3 >> 8) & 0xFF,
                              255,
                              255);
@@ -458,11 +470,11 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
                                  color);
             }
 
-            // draw data1 (??)
-            if (showOther && level->blocks[y][x].data1 > -1) {
+            // draw data1 (breakables)
+            if (showBreakable && level->blocks[y][x].breakable > -1) {
                 // (TODO: colors / tile numbers)
                 QColor color;
-                color.setHsv(20 * (level->blocks[y][x].data1) & 0xFF,
+                color.setHsv(20 * (level->blocks[y][x].breakable) & 0xFF,
                              255,
                              255);
                 painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
@@ -488,5 +500,44 @@ void MapScene::drawForeground(QPainter *painter, const QRectF& /* rect */) {
         int selTop  = qMin(selY, selY + selLength + 1);
         QRect selArea(selLeft * TILE_SIZE, selTop * TILE_SIZE, abs(selWidth) * TILE_SIZE, abs(selLength) * TILE_SIZE);
         painter->fillRect(selArea, MapScene::selectionColor);
+    }
+
+    // draw objects (add a toggle for this later)
+    // for now just write their names
+    if (showObjects) for (uint i = 0; i < level->objects.size(); i++) {
+        const object_t &obj = level->objects[i];
+
+        QString infoText = level->objectNames[obj.type];
+        QRect infoRect = MapScene::infoFontMetrics.boundingRect(infoText);
+        double objX = (double)obj.x / 16 * TILE_SIZE;
+        // invert Y-axis
+        double objY = double(16 * level->height - obj.y) / 16 * TILE_SIZE;
+
+        painter->fillRect(objX, objY - infoRect.height() + MAP_TEXT_PAD_V,
+                         infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + MAP_TEXT_PAD_V,
+                         MapScene::objectColor);
+        painter->setFont(MapScene::infoFont);
+        painter->drawText(objX, objY - infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                          infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                          0, infoText);
+    }
+
+    // draw items
+    if (showItems) for (uint i = 0; i < level->items.size(); i++) {
+            const item_t &obj = level->items[i];
+
+            QString infoText = QString("Item");
+            QRect infoRect = MapScene::infoFontMetrics.boundingRect(infoText);
+            double objX = (double)obj.x / 16 * TILE_SIZE;
+            // invert Y-axis
+            double objY = double(16 * level->height - obj.y) / 16 * TILE_SIZE;
+
+            painter->fillRect(objX, objY - infoRect.height() + MAP_TEXT_PAD_V,
+                             infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + MAP_TEXT_PAD_V,
+                             MapScene::itemColor);
+            painter->setFont(MapScene::infoFont);
+            painter->drawText(objX, objY - infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                              infoRect.width() + 2 * MAP_TEXT_PAD_H, infoRect.height() + 2 * MAP_TEXT_PAD_V,
+                              0, infoText);
     }
 }

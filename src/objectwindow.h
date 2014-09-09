@@ -21,11 +21,14 @@ public:
     void setLevel(const LevelData*);
     void update();
 
+private slots:
+    void showInfo(QTreeWidgetItem * item, int column);
+
 private:
     Ui::ObjectWindow *ui;
     const LevelData *level;
 
-    QTreeWidgetItem stateRoot, enemyRoot, objectRoot, otherRoot;
+    QTreeWidgetItem stateRoot, enemyRoot, objectRoot, itemRoot;
 };
 
 #endif // OBJECTWINDOW_H

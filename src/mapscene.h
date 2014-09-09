@@ -23,9 +23,9 @@ class MapScene : public QGraphicsScene {
     Q_OBJECT
 
 private:
-    static const QColor infoColor, infoBackColor;
+    static const QColor objectColor, infoBackColor;
     static const QColor selectionColor, selectionBorder;
-    static const QColor layerColor;
+    static const QColor itemColor;
     static const QFont infoFont;
     static const QFontMetrics infoFontMetrics;
 
@@ -42,8 +42,10 @@ private:
     QTimer animTimer;
 
     bool showCollision;
-    bool showStuff[3];
-    bool showOther;
+    bool showVisual[3];
+    bool showBreakable;
+    bool showObjects;
+    bool showItems;
 
     void copyTiles(bool cut);
     void deleteTiles();
@@ -86,7 +88,9 @@ public slots:
     void setShowFGDecor(bool);
     void setShowTerrain(bool);
     void setShowBGDecor(bool);
-    void setShowOther(bool);
+    void setShowBreakable(bool);
+    void setShowObjects(bool);
+    void setShowItems(bool);
 
 signals:
     void doubleClicked();

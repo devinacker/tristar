@@ -88,8 +88,10 @@
     <addaction name="action_FG_Decor"/>
     <addaction name="action_Terrain"/>
     <addaction name="action_BG_Decor"/>
+    <addaction name="action_Breakable"/>
     <addaction name="separator"/>
-    <addaction name="action_Other"/>
+    <addaction name="action_Objects"/>
+    <addaction name="action_Items"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -560,7 +562,7 @@
     <string>BG Decor</string>
    </property>
   </action>
-  <action name="action_Other">
+  <action name="action_Breakable">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -568,7 +570,29 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Other</string>
+    <string>Breakable</string>
+   </property>
+  </action>
+  <action name="action_Objects">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Objects</string>
+   </property>
+  </action>
+  <action name="action_Items">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Items</string>
    </property>
   </action>
  </widget>

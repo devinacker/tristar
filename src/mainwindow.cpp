@@ -72,8 +72,12 @@ void MainWindow::setupSignals() {
             scene, SLOT(setShowTerrain(bool)));
     connect(ui->action_BG_Decor, SIGNAL(triggered(bool)),
             scene, SLOT(setShowBGDecor(bool)));
-    connect(ui->action_Other, SIGNAL(triggered(bool)),
-            scene, SLOT(setShowOther(bool)));
+    connect(ui->action_Breakable, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowBreakable(bool)));
+    connect(ui->action_Objects, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowObjects(bool)));
+    connect(ui->action_Items, SIGNAL(triggered(bool)),
+            scene, SLOT(setShowItems(bool)));
 
     // help menu
     connect(ui->action_About, SIGNAL(triggered()),
@@ -96,8 +100,10 @@ void MainWindow::setupActions() {
     ui->toolBar->addAction(ui->action_FG_Decor);
     ui->toolBar->addAction(ui->action_Terrain);
     ui->toolBar->addAction(ui->action_BG_Decor);
+    ui->toolBar->addAction(ui->action_Breakable);
     ui->toolBar->addSeparator();
-    ui->toolBar->addAction(ui->action_Other);
+    ui->toolBar->addAction(ui->action_Objects);
+    ui->toolBar->addAction(ui->action_Items);
 }
 
 /*

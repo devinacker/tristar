@@ -17,7 +17,7 @@ void LevelData::open(QFile& file) {
     QVector<uint> ptrs;
     ptrs.resize(3);
 
-    // open map data 1 (chunk 1)
+    // open breakables (chunk 1)
     seekChunk(file, 0);
     // read width/height
     file.read((char*)&width, 4);
@@ -31,13 +31,13 @@ void LevelData::open(QFile& file) {
     for (int y = height - 1; y >= 0; y--) {
         this->blocks[y].resize(width);
         for (uint x = 0; x < width; x++) {
-            file.read((char*)&this->blocks[y][x].data1, 2);
+            file.read((char*)&this->blocks[y][x].breakable, 2);
         }
     }
 
     // TODO: check if map data 2 is ever actually used
 
-    // open map data 3 (chunk 3)
+    // open collision (chunk 3)
     seekChunk(file, 2);
     // read pointer
     file.read((char*)&ptr, 4);
@@ -53,11 +53,11 @@ void LevelData::open(QFile& file) {
 
     for (int y = height - 1; y >= 0; y--) {
          for (uint x = 0; x < width; x++) {
-             file.read((char*)&this->blocks[y][x].data3, 4);
+             file.read((char*)&this->blocks[y][x].collision, 4);
          }
     }
 
-    // open map data 4 (chunk 4)
+    // open visual map data (chunk 4)
     seekChunk(file, 3);
     // get two unknown values
     file.read((char*)&this->unknown1, 4);
@@ -82,8 +82,8 @@ void LevelData::open(QFile& file) {
         for (int y = height - 1; y >= 0; y--) {
              for (uint x = 0; x < width && this->width; x++) {
                  this->blocks[y].resize(width);
-                 file.read((char*)&this->blocks[y][x].data4[i].first, 2);
-                 file.read((char*)&this->blocks[y][x].data4[i].second, 2);
+                 file.read((char*)&this->blocks[y][x].visual[i].first, 2);
+                 file.read((char*)&this->blocks[y][x].visual[i].second, 2);
              }
         }
     }
@@ -179,17 +179,17 @@ void LevelData::open(QFile& file) {
         file.seek(ptr);
     }
 
-    // open map data 5 (chunk 9)
+    // open items (chunk 9)
     seekChunk(file, 8);
     file.read((char*)&count, 4);
-    this->data5.resize(count);
+    this->items.resize(count);
     for (uint i = 0; i < count; i++) {
         for (uint j = 0; j < 3; j++) {
-            file.read((char*)&this->data5[i].data[j], 4);
+            file.read((char*)&this->items[i].data[j], 4);
         }
-        file.read((char*)&this->data5[i].x, 4);
-        file.read((char*)&this->data5[i].y, 4);
-        file.read((char*)&this->data5[i].type, 4);
+        file.read((char*)&this->items[i].x, 4);
+        file.read((char*)&this->items[i].y, 4);
+        file.read((char*)&this->items[i].data2, 4);
     }
 
     fflush(stdout);
@@ -206,5 +206,5 @@ void LevelData::clear() {
     this->enemies.clear();
     this->objects.clear();
     this->objectNames.clear();
-    this->data5.clear();
+    this->items.clear();
 }

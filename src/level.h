@@ -9,13 +9,13 @@
 class QFile;
 
 struct mapblock_t {
-    int16_t  data1;
-    uint32_t data3;
+    int16_t  breakable;
+    uint32_t collision;
 
     struct {
         int16_t  first;
         uint16_t second;
-    } data4[3];
+    } visual[3];
 };
 
 struct enemystate_t {
@@ -31,9 +31,9 @@ struct object_t {
     int32_t data[10];
 };
 
-struct data5_t {
+struct item_t {
     int32_t data[3];
-    uint32_t x, y, type;
+    uint32_t x, y, data2;
 };
 
 struct LevelData {
@@ -51,7 +51,7 @@ struct LevelData {
     QVector<object_t> objects;
     QVector<QString> objectNames;
 
-    QVector<data5_t> data5;
+    QVector<item_t> items;
 
     void open(QFile&);
     void clear();

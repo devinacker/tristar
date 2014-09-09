@@ -1,4 +1,5 @@
 #include <QTreeWidget>
+#include <QMessageBox>
 
 #include "objectwindow.h"
 #include "ui_objectwindow.h"
@@ -19,12 +20,15 @@ ObjectWindow::ObjectWindow(QWidget *parent, const LevelData *level) :
     stateRoot.setText(0, "States");
     enemyRoot.setText(0, "Enemy Types");
     objectRoot.setText(0, "Objects");
-    otherRoot.setText(0, "Unknown");
+    itemRoot.setText(0, "Items");
 
     ui->tree->insertTopLevelItem(0, &stateRoot);
     ui->tree->insertTopLevelItem(1, &enemyRoot);
     ui->tree->insertTopLevelItem(2, &objectRoot);
-    ui->tree->insertTopLevelItem(3, &otherRoot);
+    ui->tree->insertTopLevelItem(3, &itemRoot);
+
+    connect(ui->tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this, SLOT(showInfo(QTreeWidgetItem*,int)));
 }
 
 void ObjectWindow::setLevel(const LevelData *level) {
@@ -81,18 +85,49 @@ void ObjectWindow::update() {
         item->setData(1, 0, i);
     }
 
-    // update unknown thing
-    children = otherRoot.takeChildren();
+    // update items
+    children = itemRoot.takeChildren();
     for (int i = 0; i < children.size(); i++) {
         delete children[i];
     }
-    otherRoot.setText(0, QString("Unknown (%1)").arg(level->data5.size()));
-    for (int i = 0; i < level->data5.size(); i++) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(&otherRoot);
-        const data5_t &other = level->data5[i];
-        item->setText(0, QString("(%1, %2) Unknown %3")
-                      .arg(other.x).arg(other.y).arg(other.type));
+    itemRoot.setText(0, QString("Items (%1)").arg(level->items.size()));
+    for (int i = 0; i < level->items.size(); i++) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(&itemRoot);
+        const item_t &theItem = level->items[i];
+        item->setText(0, QString("(%1, %2) Item")
+                      .arg(theItem.x).arg(theItem.y));
         item->setData(1, 0, i);
+    }
+}
+
+void ObjectWindow::showInfo(QTreeWidgetItem *item, int /* column */) {
+    QString info;
+    QTreeWidgetItem *parent = item->parent();
+
+    int num = item->data(1, 0).toInt();
+
+    // show enemy state info
+    if (parent == &stateRoot) {
+        QStringList states = level->states.keys();
+        const enemystate_t state = level->states[states[num]];
+        info = "%1, %2, %3, %4, %5, %6, %7, %8";
+        for (uint i = 0; i < 8; i++)
+            info = info.arg(state.data[i]);
+    } else if (parent == &objectRoot) {
+        const object_t obj = level->objects[num];
+        info = "%1, %2, %3, %4, %5, %6, %7, %8, %9, %10";
+        for (uint i = 0; i < 10; i++)
+            info = info.arg(obj.data[i]);
+    } else if (parent == &itemRoot) {
+        const item_t itm = level->items[num];
+        info = "%1, %2, %3, %4";
+        for (uint i = 0; i < 3; i++)
+            info = info.arg(itm.data[i]);
+        info = info.arg(itm.data2);
+    }
+
+    if (!info.isNull()) {
+        QMessageBox::information(this, item->text(0), info, QMessageBox::Ok);
     }
 }
 
