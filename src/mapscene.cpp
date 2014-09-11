@@ -457,7 +457,7 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
                     // (TODO: colors / tile numbers)
                     QColor color;
                     color.setHsv(20 * (level->blocks[y][x].visual[i].first) & 0xFF,
-                                 255,
+                                 192,
                                  255,
                                  i == 1 ? 255 : 128);
                     painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
@@ -470,7 +470,6 @@ void MapScene::drawBackground(QPainter *painter, const QRectF &rect) {
                 // (TODO: colors / tile numbers)
                 QColor color;
                 color.setHsv(20 * (level->blocks[y][x].collision - 1) & 0xFF,
-                             //20 * (level->blocks[y][x].data3 >> 8) & 0xFF,
                              255,
                              255);
                 painter->fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,

@@ -192,16 +192,15 @@ void MainWindow::openFile() {
                 return;
             }
 
-            fileName = newFileName;
-            fileOpen = true;
-            setOpenFileActions(true);
+            if (level.open(file)) {
+                fileName = newFileName;
+                fileOpen = true;
+                setOpenFileActions(true);
 
-            level.open(file);
-            scene->refresh();
-            objWin->update();
-            objWin->show();
+                objWin->update();
+                objWin->show();
+            }
 
-            updateTitle();
             file.close();
         } else {
             QMessageBox::information(this,
@@ -209,6 +208,9 @@ void MainWindow::openFile() {
                                      "Unable to open file.",
                                      QMessageBox::Ok);
         }
+
+        scene->refresh();
+        updateTitle();
     }
 }
 

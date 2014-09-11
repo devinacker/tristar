@@ -58,8 +58,18 @@ struct LevelData {
 
     QVector<item_t> items;
 
-    void open(QFile&);
+    bool open(QFile&);
     void clear();
+
+private:
+    void loadBreakable(QFile&, uint);
+    void loadCollision(QFile&, uint);
+    void loadVisual(QFile&, uint);
+    void loadEnemies(QFile&, uint);
+    void loadEnemyTypes(QFile&, uint);
+    void loadMusic(QFile&, uint);
+    void loadObjects(QFile&, uint);
+    void loadItems(QFile&, uint);
 };
 
 #endif // LEVEL_H
