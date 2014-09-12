@@ -20,7 +20,7 @@ template <typename type> type readNum(QFile &file) {
     if (bigEndian)
         return qFromBigEndian<type>((uchar*)&num);
 
-    return num;
+    return qFromLittleEndian<type>((uchar*)&num);
 }
 
 uint chunkOffset(QFile &file, uint chunk) {
