@@ -64,6 +64,7 @@ struct LevelData {
 private:
     void loadBreakable(QFile&, uint);
     void loadCollision(QFile&, uint);
+    void loadCollisionRTDL(QFile&, uint);
     void loadVisual(QFile&, uint);
     void loadEnemies(QFile&, uint);
     void loadEnemyTypes(QFile&, uint);

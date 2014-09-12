@@ -182,7 +182,7 @@ void MainWindow::openFile() {
         if (file.open(QFile::ReadOnly)) {
             // check magic
             file.seek(0);
-            if (file.read(6) != "XBIN\x34\x12") {
+            if (file.read(4) != "XBIN") {
                 QMessageBox::information(this,
                                          "Open Map",
                                          "File is not a valid map.",
