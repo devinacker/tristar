@@ -1,3 +1,5 @@
+![screenshot](https://dl.dropboxusercontent.com/u/43107309/tristar-TDXstuff.png)
+
 This is a (barebones) map viewer for Kirby: Triple Deluxe and Return to Dream Land. Build using Qt 5.
 
 You need either a Wii disc image or a decrypted RomFS dump in order to do anything with this. Don't ask me where to get one.
